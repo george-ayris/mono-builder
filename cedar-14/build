@@ -5,7 +5,8 @@ if [ ! -f "/var/cache/mono-$VERSION.tar.bz2" ]; then
   wget -q -O /var/cache/mono-$VERSION.tar.bz2 http://download.mono-project.com/sources/mono/mono-$VERSION.tar.bz2
 fi
 echo "Decompressing"
-tar jxf /var/cache/mono-$VERSION.tar.bz2
+mkdir mono-$VERSION
+tar jxf /var/cache/mono-$VERSION.tar.bz2 -C mono-$VERSION --strip-components=1
 echo "Run configure"
 cd mono-$VERSION
 ./configure --prefix=/app/mono \
@@ -26,6 +27,7 @@ export PKG_CONFIG_PATH=/app/mono/lib/pkgconfig/
 echo "Run autogen"
 ./autogen.sh --prefix=/app/mono
 echo "Run make"
+mozroots --import --sync
 make
 echo "Run make install"
 make install
